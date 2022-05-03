@@ -1,0 +1,54 @@
+#HeaderWrapper {
+  margin: 0;
+  padding: 0;
+  display: block;
+  background-color: #FFF4E4;
+}
+
+#Header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 2%;
+  padding-top: 2%;
+}
+
+#TitleIcon {
+  font-size: 30px;
+}
+
+#UserInfo {
+  text-align: end;
+}
+
+#Nav {
+  display: flex;
+}
+
+.NavItems {
+  margin: 0 15px;
+  display: inline-block;
+  margin-top: auto;
+  margin-bottom: 0;
+  letter-spacing: 2px;
+  text-decoration: none;
+  color: black;
+  transition: .2s;
+}
+
+.isActive {
+  font-size: 30px;
+  font-weight:400;
+}
+
+#AddHeader {
+  display: flex;
+  justify-content: space-between;
+  margin: 2% 15%;
+}
+
+#TextAddHeader {
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: bolder;
+}
