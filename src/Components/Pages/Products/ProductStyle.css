@@ -1,0 +1,12 @@
+.buttons {
+  justify-content: space-between;
+}
+
+.category {
+  cursor: pointer;
+  user-select: none;
+}
+
+.product {
+  cursor: pointer;
+}

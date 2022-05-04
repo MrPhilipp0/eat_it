@@ -1,0 +1,13 @@
+.page {
+  margin: 2% 15%;
+  background-color: #FFF4F4;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+
+.link:hover {
+  color: black;
+}

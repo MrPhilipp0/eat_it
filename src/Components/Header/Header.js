@@ -7,6 +7,7 @@ const Header = () => {
 
   return (
     <div id="HeaderWrapper">
+
       <div id="Header">
         <div id="TitleIcon">EatIt</div>
         { !MOBILE && <Nav /> }
@@ -15,6 +16,7 @@ const Header = () => {
           <p className="m-0">Filip Kniwel</p>
         </div>
       </div>
+
       <div id="AddHeader">
         <div id="TextAddHeader">
           <p>Dodaj produkty...</p>
@@ -26,6 +28,7 @@ const Header = () => {
           svg
         </div>
       </div>
+      
     </div>
   );
 }
