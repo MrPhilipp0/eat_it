@@ -2,7 +2,7 @@ import React from 'react';
 import Product from "./Product";
 import { Button } from 'react-bootstrap';
 
-const ProductCategory = ({category, products}) => {
+const ProductCategory = ({category, objects}) => {
 
   const [visibility, setVisibility] = React.useState(true);
   const handleVisibility = () => setVisibility(!visibility);
@@ -15,7 +15,7 @@ const ProductCategory = ({category, products}) => {
       {
         visibility && (
           <div className="d-flex ms-4">
-            {products.map(product => <Product key={product} product={product}/>)}
+            {objects.map(product => <Product key={product.pol} product={product}/>)}
           </div>
         )
       }

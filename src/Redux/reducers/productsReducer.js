@@ -1,10 +1,4 @@
-import { useState } from 'react';
-import { Button, FormControl } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import ProductsList from './ProductsList';
-
-import '../StylesPage.css';
-import './ProductStyle.css';
+import { ADD_PRODUCT, EDIT_PRODUCT } from '../actions/actionsTypes'
 
 const PRODUCTS_DATA = [
   {
@@ -145,41 +139,30 @@ const PRODUCTS_DATA = [
   },
 ]
 
-const Products = () => {
+let productsCounter = PRODUCTS_DATA.reduce((a,b) => a += b.objects.length,0);
 
-  const [productsSearch, setProductsSearch] = useState(PRODUCTS_DATA);
-
-  const handleSearch = e => {
-    const searchInp = e.target.value.toLowerCase();
-
-    if(searchInp.length) {
-      let productsArr = PRODUCTS_DATA.map(categoryProducts => {
-        const products = categoryProducts.objects;
-        return {
-          category: categoryProducts.category,
-          objects: products.filter(product => product.pol.toLowerCase().includes(searchInp) || product.eng.toLowerCase().includes(searchInp)),
-        }
-      });
-
-      productsArr = productsArr.filter(categoryProducts => categoryProducts.objects.length);
-      setProductsSearch(productsArr);
-    } else {
-      setProductsSearch(PRODUCTS_DATA);
-    }
-  }
-
-  return (
-    <section className="page">
-      <div className="d-flex p-4 buttons">
-        <Link to="/addProduct">
-          <Button className="me-5 fs-4 px-5">Dodaj produkt</Button>
-        </Link>
-        <FormControl placeholder='Szukaj' onChange={handleSearch}/>
-      </div>
-
-      <ProductsList PRODUCTS={productsSearch}/>
-    </section>
-  );
+const initialState = {
+  products: PRODUCTS_DATA,
 }
- 
-export default Products;
+
+const productsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_PRODUCT:
+      const newProduct = { id: ++productsCounter,  ...action.product};
+      return {
+        // tasks: [...state.tasks, newTask],
+      }
+    case EDIT_PRODUCT:
+      const index = state.tasks.findIndex(task => task.id === action.id);
+      const tasks = [...state.tasks];
+      tasks[index] = {...action.task};
+      return {
+        // tasks: tasks,
+      }
+    default:
+      break;
+  }
+  return state;
+}
+
+export default productsReducer;
