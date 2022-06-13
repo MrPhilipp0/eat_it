@@ -31,32 +31,29 @@ async function downloadDataProduct(product) {
 }
 
 const ModalOneProduct = ({state, handle, product}) => {
-  const productsProperties = product;
+  const productProperties = product;
   let productPropertiesREF = useRef(null);
+
+  const [weight, setWeight] = useState(100);
+  const handleSetWeight = e => setWeight(e.target.value);
+
+  const [properties, setProperties] = useState(product);
+  const handleSetProperties = props => setProperties(props);
 
   const [showDetails, setShowDetails] = useState(false);
   const handleShowDetails = () => {
-    setShowDetails(!showDetails);
-    if (!productsProperties.calories) {
+    if (!showDetails) {
       (async() => {
-        await downloadDataProduct(productsProperties);
-        updateProductProperties();
+        await downloadDataProduct(productProperties);
+        await setShowDetails(!showDetails);
+        await handleSetProperties(productProperties);
       })()
+    } else {
+      setShowDetails(!showDetails);
     }
   };
-
-  const updateProductProperties = () => {
-    const properties = productPropertiesREF.current;
-    const {calories, cholesterol, fat, fiber, potassium, protein, sodium, sugar} = productsProperties;
-    properties.querySelector(".calories").innerText = `Kalorie (kcal) = ${calories}`;
-    properties.querySelector(".cholesterol").innerText = `Cholesterol (mg) = ${cholesterol}`;
-    properties.querySelector(".fat").innerText = `Tłuszcze (g) = ${fat}`;
-    properties.querySelector(".fiber").innerText = `Błonnik (g) = ${fiber}`;
-    properties.querySelector(".potassium").innerText = `Potas (mg) = ${potassium}`;
-    properties.querySelector(".protein").innerText = `Białko (g) = ${protein}`;
-    properties.querySelector(".sodium").innerText = `Sód (mg) = ${sodium}`;
-    properties.querySelector(".sugar").innerText = `Cukier (g) = ${sugar}`;
-  }
+  
+  const calculateProperties = prop => Math.round(prop * weight / 100);
 
   return (
     <Modal show={state} onHide={handle}>
@@ -66,19 +63,22 @@ const ModalOneProduct = ({state, handle, product}) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <button onClick={handleShowDetails}>{showDetails ? "Ukryj szczegóły" : "Pokaż szczegóły"}</button>
+        <button className="btn btn-dark" onClick={handleShowDetails}>{showDetails ? "Ukryj szczegóły" : "Pokaż szczegóły"}</button>
         {
           showDetails && (
             <div className="mt-3" ref={productPropertiesREF}>
-              <p>Waga = 100g</p>
-              <p className="calories">Kalorie (kcal) = {productsProperties.calories}</p>
-              <p className="cholesterol">Cholesterol (mg) = {productsProperties.cholesterol}</p>
-              <p className="fat">Tłuszcze (g) = {productsProperties.fat}</p>
-              <p className="fiber">Błonnik (g) = {productsProperties.fiber}</p>
-              <p className="potassium">Potas (mg) = {productsProperties.potassium}</p>
-              <p className="protein">Białko (g) = {productsProperties.protein}</p>
-              <p className="sodium">Sód (mg) = {productsProperties.sodium}</p>
-              <p className="sugar">Cukier (g) = {productsProperties.sugar}</p>
+              <div className="d-flex">
+                <p className="me-1">Waga (g/ml) =</p>
+                <input type="number" value={weight} onChange={handleSetWeight}></input>
+              </div>
+              <p className="calories">Kalorie (kcal) = {calculateProperties(properties.calories)}</p>
+              <p className="protein">Białko (g) = {calculateProperties(properties.protein)}</p>
+              <p className="sugar">Cukier (g) = {calculateProperties(properties.sugar)}</p>
+              <p className="fat">Tłuszcze (g) = {calculateProperties(properties.fat)}</p>
+              <p className="cholesterol">Cholesterol (mg) = {calculateProperties(properties.cholesterol)}</p>
+              <p className="fiber">Błonnik (g) = {calculateProperties(properties.fiber)}</p>
+              <p className="potassium">Potas (mg) = {calculateProperties(properties.potassium)}</p>
+              <p className="sodium">Sód (mg) = {calculateProperties(properties.sodium)}</p>
             </div>
           )
         }

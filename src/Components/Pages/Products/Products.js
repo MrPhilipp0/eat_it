@@ -8,7 +8,7 @@ import './ProductStyle.css';
 
 const PRODUCTS_DATA = [
   {
-    category: 'Owoce',
+    category: 'Owoce/Fruits',
     objects: [
       {
         pol: 'Jabłko',
@@ -25,7 +25,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Warzywa',
+    category: 'Warzywa/Vegetables',
     objects: [
       {
         pol: 'Marchew',
@@ -42,7 +42,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Napoje',
+    category: 'Napoje/Drinks',
     objects: [
       {
         pol: 'Pepsi',
@@ -59,7 +59,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Alkohol',
+    category: 'Alkohol/Alcohol',
     objects: [
       {
         pol: 'Piwo',
@@ -76,7 +76,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Pieczywo',
+    category: 'Pieczywo/Bread',
     objects: [
       {
         pol: 'Bułka',
@@ -93,7 +93,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Nabiał',
+    category: 'Nabiał/Dairy',
     objects: [
       {
         pol: 'Ser żółty',
@@ -110,7 +110,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Słodycze',
+    category: 'Słodycze/Sweets',
     objects: [
       {
         pol: 'Czekolada gorzka',
@@ -127,7 +127,7 @@ const PRODUCTS_DATA = [
     ]
   },
   {
-    category: 'Przyprawy',
+    category: 'Przyprawy/Spices',
     objects: [
       {
         pol: 'Papryka ostra',

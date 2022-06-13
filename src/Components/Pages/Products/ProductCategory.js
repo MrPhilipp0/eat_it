@@ -7,10 +7,15 @@ const ProductCategory = ({category, objects}) => {
   const [visibility, setVisibility] = React.useState(true);
   const handleVisibility = () => setVisibility(!visibility);
 
+  const categoryNames = category.split('/');
+
   return (
     <div className='mt-2'>
       <div className="d-flex">
-        <Button onClick={handleVisibility} className="ms-4 mt-3 fs-5" variant="dark">{category}</Button>
+        <Button onClick={handleVisibility} className="ms-4 mt-3" variant="dark">
+          <p className="fs-5 mb-1">{categoryNames[0]}</p>
+          <p className="mb-1 fw-light">{categoryNames[1]}</p>
+        </Button>
       </div>
       {
         visibility && (
