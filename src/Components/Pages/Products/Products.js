@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import ProductsList from './ProductsList';
+import ProductsList from './List';
 
 import '../StylesPage.css';
 import './ProductStyle.css';
@@ -169,7 +169,7 @@ const Products = () => {
   }
 
   return (
-    <section className="page">
+    <section className="page px-5 py-3">
       <div className="d-flex p-4 buttons">
         <Link to="/addProduct">
           <Button className="me-5 fs-4 px-5">Dodaj produkt</Button>

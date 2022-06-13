@@ -1,37 +1,38 @@
 import { useState, useRef } from 'react';
 import { Modal } from 'react-bootstrap';
 
-const API_KEY = '19yzIl1VTUeDcJ2lI+Vucg==gOeJidsoibjzCyny';
-
-async function downloadDataProduct(product) {
+export async function downloadDataProduct(product) {
   const query = product.eng;
   const settings = {
     method: 'GET',
     headers: {
-      'X-Api-Key' : API_KEY,
+      'X-Api-Key' : '19yzIl1VTUeDcJ2lI+Vucg==gOeJidsoibjzCyny',
     }
   }
   const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${query}`, settings);
   const data = await response.json();
 
   if (data.items.length) {
-    const {calories, cholesterol_mg, fat_total_g, fiber_g, potassium_mg, protein_g, sodium_mg, sugar_g} = data.items[0];
-    product.calories = calories;
-    product.cholesterol = cholesterol_mg;
-    product.fat = fat_total_g;
-    product.fiber = fiber_g;
-    product.potassium = potassium_mg;
-    product.protein= protein_g;
-    product.sodium = sodium_mg;
-    product.sugar = sugar_g;
-
+    const {calories, cholesterol_mg, fat_total_g, fiber_g, potassium_mg, protein_g, sodium_mg, sugar_g, name} = data.items[0];
+    return {
+      pol: product.pol[0].toUpperCase().concat(product.pol.slice(1,product.pol.length)),
+      eng: name[0].toUpperCase().concat(name.slice(1,name.length)),
+      calories: calories,
+      cholesterol: cholesterol_mg,
+      fat: fat_total_g,
+      fiber: fiber_g,
+      potassium: potassium_mg,
+      protein: protein_g,
+      sodium: sodium_mg,
+      sugar: sugar_g
+    }
   } else {
     throw new Error('Download product error. Product not found!');
   }
 }
 
-const ModalOneProduct = ({state, handle, product}) => {
-  const productProperties = product;
+const ModalProductProps = ({state, handle, product}) => {
+  // const productProperties = product;
   let productPropertiesREF = useRef(null);
 
   const [weight, setWeight] = useState(100);
@@ -44,9 +45,8 @@ const ModalOneProduct = ({state, handle, product}) => {
   const handleShowDetails = () => {
     if (!showDetails) {
       (async() => {
-        await downloadDataProduct(productProperties);
+        await handleSetProperties(await downloadDataProduct(product));
         await setShowDetails(!showDetails);
-        await handleSetProperties(productProperties);
       })()
     } else {
       setShowDetails(!showDetails);
@@ -87,4 +87,4 @@ const ModalOneProduct = ({state, handle, product}) => {
   );
 }
  
-export default ModalOneProduct;
+export default ModalProductProps;

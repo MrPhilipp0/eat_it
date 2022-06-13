@@ -2,7 +2,7 @@ import React from 'react';
 import Product from "./Product";
 import { Button } from 'react-bootstrap';
 
-const ProductCategory = ({category, objects}) => {
+const Category = ({category, objects}) => {
 
   const [visibility, setVisibility] = React.useState(true);
   const handleVisibility = () => setVisibility(!visibility);
@@ -28,4 +28,4 @@ const ProductCategory = ({category, objects}) => {
   );
 }
  
-export default ProductCategory;
+export default Category;

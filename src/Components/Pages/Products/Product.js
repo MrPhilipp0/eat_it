@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
-import ModalOneProduct from './ModalOneProduct';
+import ModalProductProps from './ModalProductProps';
 
 const Product = ({product}) => {
 
@@ -9,7 +9,7 @@ const Product = ({product}) => {
   
   return (
     <React.Fragment>
-      <ModalOneProduct state={showProduct} handle={handleShowProduct} product={product}/>
+      <ModalProductProps state={showProduct} handle={handleShowProduct} product={product}/>
       <Card className="me-2 mt-2 product" onClick={handleShowProduct}>
         <Card.Title className="p-2 px-3 fs-6 m-auto" style={{justifyContent:'center'}}>
           <p className="d-flex" style={{justifyContent:'center'}}>{product.pol}</p>
