@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { connect } from 'react-redux';
+
 import { Button, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProductsList from './List';
@@ -6,154 +8,37 @@ import ProductsList from './List';
 import '../StylesPage.css';
 import './ProductStyle.css';
 
-const PRODUCTS_DATA = [
-  {
-    category: 'Owoce/Fruits',
-    objects: [
-      {
-        pol: 'Jabłko',
-        eng: 'Apple'
-      },
-      {
-        pol: 'Banan',
-        eng: 'Banana'
-      },
-      {
-        pol: 'Ananas',
-        eng: 'Pineapple'
-      },
-    ]
-  },
-  {
-    category: 'Warzywa/Vegetables',
-    objects: [
-      {
-        pol: 'Marchew',
-        eng: 'Carrot'
-      },
-      {
-        pol: 'Seler',
-        eng: 'Celery'
-      },
-      {
-        pol: 'Ziemiak',
-        eng: 'Potato'
-      },
-    ]
-  },
-  {
-    category: 'Napoje/Drinks',
-    objects: [
-      {
-        pol: 'Pepsi',
-        eng: 'Pepsi'
-      },
-      {
-        pol: 'Sok pomarańczowy',
-        eng: 'Orange juice'
-      },
-      {
-        pol: 'Woda',
-        eng: 'Water'
-      },
-    ]
-  },
-  {
-    category: 'Alkohol/Alcohol',
-    objects: [
-      {
-        pol: 'Piwo',
-        eng: 'Beer'
-      },
-      {
-        pol: 'Wódka',
-        eng: 'Vodka'
-      },
-      {
-        pol: 'Amaretto',
-        eng: 'Amaretto'
-      },
-    ]
-  },
-  {
-    category: 'Pieczywo/Bread',
-    objects: [
-      {
-        pol: 'Bułka',
-        eng: 'Roll'
-      },
-      {
-        pol: 'Chleb tostowy',
-        eng: 'Toasted bread'
-      },
-      {
-        pol: 'Chleb pełnoziarnisty',
-        eng: 'Whole grain bread'
-      },
-    ]
-  },
-  {
-    category: 'Nabiał/Dairy',
-    objects: [
-      {
-        pol: 'Ser żółty',
-        eng: 'Cheese'
-      },
-      {
-        pol: 'Mozzarella',
-        eng: 'Mozzarella'
-      },
-      {
-        pol: 'Mleko',
-        eng: 'Milk'
-      },
-    ]
-  },
-  {
-    category: 'Słodycze/Sweets',
-    objects: [
-      {
-        pol: 'Czekolada gorzka',
-        eng: 'Dark chocolate'
-      },
-      {
-        pol: 'Czekolada mleczna',
-        eng: 'Chocolate'
-      },
-      {
-        pol: 'Żelki',
-        eng: 'Jelly'
-      },
-    ]
-  },
-  {
-    category: 'Przyprawy/Spices',
-    objects: [
-      {
-        pol: 'Papryka ostra',
-        eng: 'Hot pepper'
-      },
-      {
-        pol: 'Papryka słodka',
-        eng: 'Sweet pepper'
-      },
-      {
-        pol: 'Bazylia',
-        eng: 'Basil'
-      },
-    ]
-  },
-]
+const checkLocalStorage = array => {
+  const productsArray = JSON.parse(JSON.stringify(array));
+  const LS = JSON.parse(localStorage.getItem('PRODUCTS')) || [];
+  if (LS.length) {
+    const listIDfromLS = LS.map(item => item.id);
+    return productsArray.map(category => {
+      return {
+        ...category,
+        objects: category.objects.map(prod => {
+          if (listIDfromLS.includes(prod.id)) {
+            return LS.filter(item => item.id === prod.id)[0];
+          } else {
+            return prod;
+          }
+        }) 
+      }        
+    })
+  }
+}
 
-const Products = () => {
+const Products = ({allProducts}) => {
 
-  const [productsSearch, setProductsSearch] = useState(PRODUCTS_DATA);
+  const ALL_PRODUCTS = checkLocalStorage(allProducts);
+
+  const [productsSearch, setProductsSearch] = useState(ALL_PRODUCTS);
 
   const handleSearch = e => {
     const searchInp = e.target.value.toLowerCase();
 
     if(searchInp.length) {
-      let productsArr = PRODUCTS_DATA.map(categoryProducts => {
+      let productsArr = ALL_PRODUCTS.map(categoryProducts => {
         const products = categoryProducts.objects;
         return {
           category: categoryProducts.category,
@@ -164,7 +49,7 @@ const Products = () => {
       productsArr = productsArr.filter(categoryProducts => categoryProducts.objects.length);
       setProductsSearch(productsArr);
     } else {
-      setProductsSearch(PRODUCTS_DATA);
+      setProductsSearch(ALL_PRODUCTS);
     }
   }
 
@@ -181,5 +66,11 @@ const Products = () => {
     </section>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    allProducts : state.ProductsReducer.products,
+  };
+}
  
-export default Products;
+export default connect(mapStateToProps)(Products);

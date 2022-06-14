@@ -15,6 +15,7 @@ export async function downloadDataProduct(product) {
   if (data.items.length) {
     const {calories, cholesterol_mg, fat_total_g, fiber_g, potassium_mg, protein_g, sodium_mg, sugar_g, name} = data.items[0];
     return {
+      id: product.id,
       pol: product.pol[0].toUpperCase().concat(product.pol.slice(1,product.pol.length)),
       eng: name[0].toUpperCase().concat(name.slice(1,name.length)),
       calories: calories,
@@ -32,7 +33,6 @@ export async function downloadDataProduct(product) {
 }
 
 const ModalProductProps = ({state, handle, product}) => {
-  // const productProperties = product;
   let productPropertiesREF = useRef(null);
 
   const [weight, setWeight] = useState(100);
@@ -42,11 +42,14 @@ const ModalProductProps = ({state, handle, product}) => {
   const handleSetProperties = props => setProperties(props);
 
   const [showDetails, setShowDetails] = useState(false);
+
   const handleShowDetails = () => {
     if (!showDetails) {
       (async() => {
-        await handleSetProperties(await downloadDataProduct(product));
-        await setShowDetails(!showDetails);
+        const prod = await downloadDataProduct(product); // download product properties from API
+        await handleSetProperties(prod); // setState product properties 
+        await handleLocaleStorage(prod); // save product in locale storage
+        await setShowDetails(!showDetails); // show properties state
       })()
     } else {
       setShowDetails(!showDetails);
@@ -54,6 +57,12 @@ const ModalProductProps = ({state, handle, product}) => {
   };
   
   const calculateProperties = prop => Math.round(prop * weight / 100);
+
+  const handleLocaleStorage = async newItem => {
+    const list = JSON.parse(await localStorage.getItem('PRODUCTS')) || [];
+    if (!list.filter(prod => prod.eng === newItem.eng).length) list.push(newItem);
+    await localStorage.setItem('PRODUCTS', JSON.stringify(list));
+  }
 
   return (
     <Modal show={state} onHide={handle}>
