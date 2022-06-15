@@ -161,6 +161,8 @@ export const PRODUCTS_DATA = [
   },
 ]
 
+export const API_KEY = '19yzIl1VTUeDcJ2lI+Vucg==gOeJidsoibjzCyny';
+
 // function is verifying that product is in local storage
 export const checkLS = array => {
   const productsArray = JSON.parse(JSON.stringify(array));

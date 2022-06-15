@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
-import ModalProductProps from './ModalProductProps';
+import ModalProductProps from './HandleProduct/ModalProductProps';
 
 const Product = ({product}) => {
 

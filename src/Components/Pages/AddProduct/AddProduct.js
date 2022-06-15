@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { downloadDataProduct } from '../Products/ModalProductProps';
+import { downloadProductData } from '../Products/HandleProduct/downloadData';
 import { Alert } from 'react-bootstrap';
 import '../StylesPage.css';
 
@@ -35,7 +35,7 @@ const AddProduct = () => {
     if (props.pol && props.eng) {
       (async() => {
         try {
-          setProps(await downloadDataProduct(props));
+          setProps(await downloadProductData(props));
           setAlertType(true);
           handleSetShowAlert();
         } catch(err) {
