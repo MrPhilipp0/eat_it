@@ -160,3 +160,36 @@ export const PRODUCTS_DATA = [
     ]
   },
 ]
+
+// function is verifying that product is in local storage
+export const checkLS = array => {
+  const productsArray = JSON.parse(JSON.stringify(array));
+  const LS = JSON.parse(localStorage.getItem('PRODUCTS')) || [];
+  if (LS.length) {
+    const listIDsfromLS = LS.map(item => item.id);
+    return productsArray.map(category => {
+      return {
+        ...category,
+        objects: category.objects.map(prod => {
+          if (listIDsfromLS.includes(prod.id)) {
+            return LS.filter(item => item.id === prod.id)[0];
+          } else {
+            return prod;
+          }
+        }) 
+      }        
+    })
+  } else return productsArray;
+}
+
+// add new or update existing product to local storage
+export const updateProductInLS = async newItem => {
+  const list = JSON.parse(await localStorage.getItem('PRODUCTS')) || [];
+  if (!list.filter(prod => prod.eng === newItem.eng).length) {
+    list.push(newItem);
+  } else {
+    const index = list.findIndex(prod => newItem.id === prod.id);
+    list[index] = newItem;
+  }
+  await localStorage.setItem('PRODUCTS', JSON.stringify(list));
+}

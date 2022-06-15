@@ -1,4 +1,7 @@
 import { useState, useRef } from 'react';
+import { connect } from 'react-redux';
+import { updateProduct } from '../../../Redux/actions/productsActions';
+
 import { Modal } from 'react-bootstrap';
 
 export async function downloadDataProduct(product) {
@@ -32,7 +35,7 @@ export async function downloadDataProduct(product) {
   }
 }
 
-const ModalProductProps = ({state, handle, product}) => {
+const ModalProductProps = ({state, handle, product, updateProductInState}) => {
   let productPropertiesREF = useRef(null);
 
   const [weight, setWeight] = useState(100);
@@ -44,11 +47,11 @@ const ModalProductProps = ({state, handle, product}) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const handleShowDetails = () => {
-    if (!showDetails) {
+    if (!showDetails && !properties.hasOwnProperty('calories')) {
       (async() => {
         const prod = await downloadDataProduct(product); // download product properties from API
         await handleSetProperties(prod); // setState product properties 
-        await handleLocaleStorage(prod); // save product in locale storage
+        await updateProductInState(prod); // save product in locale storage
         await setShowDetails(!showDetails); // show properties state
       })()
     } else {
@@ -57,12 +60,6 @@ const ModalProductProps = ({state, handle, product}) => {
   };
   
   const calculateProperties = prop => Math.round(prop * weight / 100);
-
-  const handleLocaleStorage = async newItem => {
-    const list = JSON.parse(await localStorage.getItem('PRODUCTS')) || [];
-    if (!list.filter(prod => prod.eng === newItem.eng).length) list.push(newItem);
-    await localStorage.setItem('PRODUCTS', JSON.stringify(list));
-  }
 
   return (
     <Modal show={state} onHide={handle}>
@@ -95,5 +92,12 @@ const ModalProductProps = ({state, handle, product}) => {
     </Modal>
   );
 }
- 
-export default ModalProductProps;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateProductInState : product => {
+      dispatch(updateProduct(product))
+    }
+  }
+}
+export default connect(null, mapDispatchToProps)(ModalProductProps);

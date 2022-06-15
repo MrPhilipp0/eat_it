@@ -1,4 +1,4 @@
-import { ADD_PRODUCT, EDIT_PRODUCT } from './actionsTypes.js';
+import { ADD_PRODUCT, UPDATE_PRODUCT } from './actionsTypes.js';
 
 const addProduct = product => {
   return {
@@ -7,12 +7,11 @@ const addProduct = product => {
   }
 };
 
-const editProduct = (id, product) => {
+const updateProduct = product => {
   return {
-    type: EDIT_PRODUCT,
-    id,
+    type: UPDATE_PRODUCT,
     product,
   }
 }
 
-export { addProduct, editProduct };
+export { addProduct, updateProduct };

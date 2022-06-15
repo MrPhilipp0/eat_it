@@ -3,42 +3,20 @@ import { connect } from 'react-redux';
 
 import { Button, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import ProductsList from './List';
+import List from './List';
 
 import '../StylesPage.css';
 import './ProductStyle.css';
 
-const checkLocalStorage = array => {
-  const productsArray = JSON.parse(JSON.stringify(array));
-  const LS = JSON.parse(localStorage.getItem('PRODUCTS')) || [];
-  if (LS.length) {
-    const listIDfromLS = LS.map(item => item.id);
-    return productsArray.map(category => {
-      return {
-        ...category,
-        objects: category.objects.map(prod => {
-          if (listIDfromLS.includes(prod.id)) {
-            return LS.filter(item => item.id === prod.id)[0];
-          } else {
-            return prod;
-          }
-        }) 
-      }        
-    })
-  }
-}
-
 const Products = ({allProducts}) => {
 
-  const ALL_PRODUCTS = checkLocalStorage(allProducts);
-
-  const [productsSearch, setProductsSearch] = useState(ALL_PRODUCTS);
+  const [productsSearch, setProductsSearch] = useState(allProducts);
 
   const handleSearch = e => {
     const searchInp = e.target.value.toLowerCase();
 
     if(searchInp.length) {
-      let productsArr = ALL_PRODUCTS.map(categoryProducts => {
+      let productsArr = allProducts.map(categoryProducts => {
         const products = categoryProducts.objects;
         return {
           category: categoryProducts.category,
@@ -49,7 +27,7 @@ const Products = ({allProducts}) => {
       productsArr = productsArr.filter(categoryProducts => categoryProducts.objects.length);
       setProductsSearch(productsArr);
     } else {
-      setProductsSearch(ALL_PRODUCTS);
+      setProductsSearch(allProducts);
     }
   }
 
@@ -61,8 +39,9 @@ const Products = ({allProducts}) => {
         </Link>
         <FormControl placeholder='Szukaj' onChange={handleSearch}/>
       </div>
+      <button onClick={() => console.log(allProducts)}>aa</button>
 
-      <ProductsList PRODUCTS={productsSearch}/>
+      <List PRODUCTS={productsSearch}/>
     </section>
   );
 }

@@ -1,11 +1,11 @@
-import { ADD_PRODUCT, EDIT_PRODUCT } from '../actions/actionsTypes'
-import { PRODUCTS_DATA } from '../store/constans';
-
+import { ADD_PRODUCT, UPDATE_PRODUCT } from '../actions/actionsTypes'
+import { PRODUCTS_DATA, checkLS, updateProductInLS } from '../store/constans';
 
 let productsCounter = PRODUCTS_DATA.reduce((a,b) => a += b.objects.length,0);
 
+
 const initialState = {
-  products: PRODUCTS_DATA,
+  products: checkLS(PRODUCTS_DATA),
 }
 
 const ProductsReducer = (state = initialState, action) => {
@@ -15,13 +15,23 @@ const ProductsReducer = (state = initialState, action) => {
       return {
         products: [...state.products, newProduct],
       }
-    // case EDIT_PRODUCT:
-    //   const index = state.tasks.findIndex(task => task.id === action.id);
-    //   const tasks = [...state.tasks];
-    //   tasks[index] = {...action.task};
-    //   return {
-    //     // tasks: tasks,
-    //   }
+    case UPDATE_PRODUCT:
+      updateProductInLS(action.product);
+      const products = [...state.products].map(category => {
+        return {
+          ...category,
+          objects: category.objects.map(prod => {
+            if (action.product.id === prod.id) {
+              return action.product;
+            } else {
+              return prod;
+            }
+          }) 
+        }        
+      })
+      return {
+        products: products,
+      }
     default:
       break;
   }
@@ -30,4 +40,3 @@ const ProductsReducer = (state = initialState, action) => {
 
 export default ProductsReducer;
 
-// check local storage to download products data to store
