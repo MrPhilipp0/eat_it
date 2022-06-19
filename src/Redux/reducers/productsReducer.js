@@ -3,7 +3,6 @@ import { PRODUCTS_DATA, checkLS, updateProductInLS } from '../store/constans';
 
 let productsCounter = PRODUCTS_DATA.reduce((a,b) => a += b.objects.length,0);
 
-
 const initialState = {
   products: checkLS(PRODUCTS_DATA),
 }
@@ -11,16 +10,27 @@ const initialState = {
 const ProductsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PRODUCT:
-      const newProduct = { id: ++productsCounter,  ...action.product};
+      const newProduct = {...action.product};
+      newProduct.id = ++productsCounter;
+      const newState2 = [...state.products].map(cat => {
+        if (cat.category === action.category) {
+          return {
+            category: cat.category,
+            objects: [...cat.objects, newProduct],
+          }
+        } else {
+          return cat
+        }
+      });
       return {
-        products: [...state.products, newProduct],
-      }
+        products: newState2 
+      } 
     case UPDATE_PRODUCT:
       updateProductInLS(action.product);
-      const products = [...state.products].map(category => {
+      const newState = [...state.products].map(cat => {
         return {
-          ...category,
-          objects: category.objects.map(prod => {
+          ...cat,
+          objects: cat.objects.map(prod => {
             if (action.product.id === prod.id) {
               return action.product;
             } else {
@@ -30,7 +40,7 @@ const ProductsReducer = (state = initialState, action) => {
         }        
       })
       return {
-        products: products,
+        products: newState,
       }
     default:
       break;

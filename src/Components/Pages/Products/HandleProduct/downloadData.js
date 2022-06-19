@@ -1,4 +1,4 @@
-import { API_KEY } from "../../../../Redux/store/constans";
+import { API_KEY, firstLetterUpperCase } from "../../../../Redux/store/constans";
 
 export async function downloadProductData(product) {
   const query = product.eng;
@@ -15,8 +15,8 @@ export async function downloadProductData(product) {
     const {calories, cholesterol_mg, fat_total_g, fiber_g, potassium_mg, protein_g, sodium_mg, sugar_g, name} = data.items[0];
     return {
       id: product.id,
-      pol: product.pol[0].toUpperCase().concat(product.pol.slice(1,product.pol.length)),
-      eng: name[0].toUpperCase().concat(name.slice(1,name.length)),
+      pol: firstLetterUpperCase(product.pol),
+      eng: firstLetterUpperCase(name),
       calories: calories,
       cholesterol: cholesterol_mg,
       fat: fat_total_g,

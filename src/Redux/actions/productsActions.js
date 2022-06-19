@@ -1,9 +1,10 @@
 import { ADD_PRODUCT, UPDATE_PRODUCT } from './actionsTypes.js';
 
-const addProduct = product => {
+const addProduct = (product, category) => {
   return {
     type: ADD_PRODUCT,
     product,
+    category
   }
 };
 

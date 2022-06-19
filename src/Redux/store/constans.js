@@ -159,9 +159,24 @@ export const PRODUCTS_DATA = [
       },
     ]
   },
-]
+  {
+    category: 'Inne/Others',
+    objects: []
+  },
+];
 
 export const API_KEY = '19yzIl1VTUeDcJ2lI+Vucg==gOeJidsoibjzCyny';
+
+export const propertiesLangMap = new Map([
+  ['calories', 'kalorie'],
+  ['cholesterol', 'cholesterol'],
+  ['fat', 'tłuszcze'],
+  ['fiber', 'błonnik'],
+  ['potassium', 'potas'],
+  ['protein', 'białko'],
+  ['sodium', 'sód'],
+  ['sugar', 'cukier']
+]);
 
 // function is verifying that product is in local storage
 export const checkLS = array => {
@@ -194,4 +209,41 @@ export const updateProductInLS = async newItem => {
     list[index] = newItem;
   }
   await localStorage.setItem('PRODUCTS', JSON.stringify(list));
+}
+
+export const firstLetterUpperCase = string => {
+  return string[0].toUpperCase().concat(string.slice(1,string.length))
+}
+
+export const ALERT_TYPES = {
+  DOWNLOADED_PRODUCT_DATA: {
+    variant: 'success',
+    closeFunction: 'handleSetShowAlert',
+    heading: 'Sukces!',
+    body: 'Poprawnie pobrano właściwości produktu. W razie potrzeby zastosuj zmiany wedle uznania.',
+  },
+  NOT_DOWNLOADED_PRODUCT_DATA : {
+    variant: 'danger',
+    closeFunction: 'handleSetShowAlert',
+    heading: 'O nie!',
+    body: 'Nie znaleziono takiego produktu. Sprawdź pisownie i spróbuj ponownie.',
+  },
+  PRODUCT_EXIST_IN_STORE : {
+    variant: 'danger',
+    closeFunction: 'handleSetShowAlert',
+    heading: 'Produkt istnieje!',
+    body: 'Taki produkt już istnieje w bazie.',
+  },
+  PRODUCT_INPUTS_ERROR : {
+    variant: 'danger',
+    closeFunction: 'handleSetShowAlert',
+    heading: 'Niepoprawnie wprowadzone dane!',
+    body: 'Sprawdź, czy zostały dodane nazwy produktu lub wybrana kategoria.',
+  },
+  PRODUCT_ADD_TO_STORE : {
+    variant: 'success',
+    closeFunction: 'handleSetShowAlert',
+    heading: 'Dobra robota!',
+    body: 'Produkt został poprawnie dodany do bazy produktów.',
+  },
 }

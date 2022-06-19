@@ -1,74 +1,109 @@
+/* eslint-disable no-eval */
 import React, { useState } from 'react';
 import { downloadProductData } from '../Products/HandleProduct/downloadData';
-import { Alert } from 'react-bootstrap';
+import { propertiesLangMap, firstLetterUpperCase, ALERT_TYPES } from '../../../Redux/store/constans';
+import { connect } from 'react-redux';
+import AlertComponent from '../../Objects/AlertComponent';
+import { Form, Button } from 'react-bootstrap';
+
 import '../StylesPage.css';
+import { addProduct } from '../../../Redux/actions/productsActions';
 
-const AddProduct = () => {
+const defaultProduct = {
+  pol: '',
+  eng: '',
+  calories: '',
+  cholesterol: '',
+  fat: '',
+  fiber: '',
+  potassium: '',
+  protein: '',
+  sodium: '',
+  sugar: ''
+};
 
-  const [props, setProps] = useState({
-    eng: '',
-    pol: '',
-    calories: '',
-    cholesterol: '',
-    fat: '',
-    fiber: '',
-    potassium: '',
-    protein: '',
-    sodium: '',
-    sugar: ''
-  })
+const AddProduct = ({allProducts, addProductToState}) => {
+
+  const [props, setProps] = useState(defaultProduct);
+  const [category, setCategory] = useState('');
+
+  const handleCategory = e => setCategory(e.target.value);
 
   const [showAlert, setShowAlert] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const handleSetShowAlert = () => setShowAlert(!showAlert);
 
   const [alertType, setAlertType] = useState('');
 
-  // Zmiana właściwości produktu
+  // Change product properties
   const handleSetProps = e => {
+    setShowAlert(false);
     const newState = JSON.parse(JSON.stringify(props));
     newState[e.target.id] = e.target.value;
     setProps(newState);
   }
 
-  // Pobranie właściwości z API
+  // Download properties from API
   const handleDownloadData = () => {
+    setShowAlert(false);
     if (props.pol && props.eng) {
       (async() => {
         try {
           setProps(await downloadProductData(props));
-          setAlertType(true);
-          handleSetShowAlert();
+          setAlertType('DOWNLOADED_PRODUCT_DATA');
+          setShowAlert(true);
         } catch(err) {
-          setAlertType(false);
-          handleSetShowAlert();
+          setAlertType('NOT_DOWNLOADED_PRODUCT_DATA');
+          setShowAlert(true);
         }
       })()
     }
   }
 
-  // Funkcja z alertem czy pobrano właściwości poprawnie czy nie
-  const alertFunction = flag => {
+  // Show alert after event
+  const alertFunction = type => {
     if (showAlert) {
-      if (!flag) {
-        return (
-          <Alert className="mt-3" variant="danger" onClose={handleSetShowAlert}>
-            <Alert.Heading>O nie! :o</Alert.Heading>
-            <p>
-              Nie znaleziono takiego produktu. Sprawdź pisownie nazw i spróbuj ponownie :P
-            </p>
-          </Alert>
-        )
-      } else {
-        return (
-          <Alert className="mt-3" variant="success" onClose={handleSetShowAlert}>
-            <Alert.Heading>Sukces!</Alert.Heading>
-            <p>
-              Poprawnie pobrano właściwości produktu. W razie potrzeby zastosuj zmiany wedle uznania.
-            </p>
-          </Alert>
-        )
-      }
+      const {variant, closeFunction, heading, body} = ALERT_TYPES[type];
+      return AlertComponent(variant, eval(closeFunction), heading, body)
     }
+  }
+
+  // Clear function
+  const clear = () => {
+    setProps(defaultProduct);
+    setShowAlert(false);
+  }
+
+  const addNewProduct = () => {
+    const checkStore = () => {
+      const arr = allProducts.reduce((arr, obj) => arr.concat(obj.objects),[]);
+      return !!arr.filter(item => item.eng.toLowerCase() === props.eng.toLowerCase()).length;
+    }
+    if (!props.eng || !props.pol || !category) {
+      setAlertType('PRODUCT_INPUTS_ERROR');
+    } else if (checkStore()){
+      setAlertType('PRODUCT_EXIST_IN_STORE');
+    } else {
+      setAlertType('PRODUCT_ADD_TO_STORE');
+      addProductToState(props, category);
+      setProps(defaultProduct);
+    }
+    setShowAlert(true);
+  }
+
+  const inputs = () => {
+    return Array.from(propertiesLangMap.keys()).map(prop => {
+      return input(firstLetterUpperCase(propertiesLangMap.get(prop)), prop, 'number')
+    })
+  }
+
+  const input = (POLname, ENGname, type) => {
+    return (
+      <div className="d-flex flex-column mt-2" key={ENGname}>
+        <p className="mb-0">{POLname}</p>
+        <input className="p-2" type={type} value={props[ENGname]} id={ENGname} onChange={handleSetProps}/>
+      </div>
+    )
   }
 
   return (
@@ -76,54 +111,46 @@ const AddProduct = () => {
       <section className="page px-5 py-3">
         <h1 className="p-4">DODAJ PRODUKT</h1>
         <div className="d-flex justify-content-around">
-          <div className="d-flex flex-column">
-            <p>Polska nazwa</p>
-            <input className="p-2" type="text" value={props.pol} id="pol" onChange={handleSetProps}/>
-          </div>
-          <div className="d-flex flex-column">
-            <p>Angielska nazwa</p>
-            <input className="p-2" type="text" value={props.eng} id="eng" onChange={handleSetProps}/>
-          </div>
+          { input('Polska nazwa', 'pol', 'text') }
+          { input('Angielska nazwa', 'eng', 'text') }
+
+          <Form.Group>
+            <Form.Label className="my-1 ms-1 fw-bold">Kategorie</Form.Label>
+            <Form.Select name='category' className="ps-1 pe-0" onChange={handleCategory}>
+              <option value=""></option>
+              {allProducts.map(e => e.category).map((category, index) => <option key={index} value={category}>{category}</option>)}
+            </Form.Select>
+          </Form.Group>
+          
           <button className='btn btn-dark' onClick={handleDownloadData}>Pobierz właściwości</button>
         </div> 
-        {
-          alertFunction(alertType)
-        }
-        <div className="d-flex flex-column">
-          <p>Kalorie</p>
-          <input className="p-2" type="number" value={props.calories} id="calories" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Cholesterol</p>
-          <input className="p-2" type="number" value={props.cholesterol} id="cholesterol" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Tłuszcze</p>
-          <input className="p-2" type="number" value={props.fat} id="fat" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Błonnik</p>
-          <input className="p-2" type="number" value={props.fiber} id="fiber" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Potas</p>
-          <input className="p-2" type="number" value={props.potassium} id="potassium" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Białko</p>
-          <input className="p-2" type="number" value={props.protein} id="protein" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Sód</p>
-          <input className="p-2" type="number" value={props.sodium} id="sodium" onChange={handleSetProps}/>
-        </div>
-        <div className="d-flex flex-column">
-          <p>Cukier</p>
-          <input className="p-2" type="number" value={props.sugar} id="sugar" onChange={handleSetProps}/>
+        
+        { inputs() }
+        { alertFunction(alertType) }
+        <div className="d-flex mt-2 justify-content-end">
+          <button className="btn btn-primary me-2" onClick={addNewProduct}>DODAJ</button>
+          <button className="btn btn-dark" onClick={clear}>WYCZYŚĆ</button>
         </div>
       </section>
     </React.Fragment>
   );
 }
+
+
+const mapStateToProps = state => {
+  return {
+    allProducts : state.ProductsReducer.products,
+  };
+}
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addProductToState : (product, category) => {
+      dispatch(addProduct(product, category));
+    }
+  }
+}
+
  
-export default AddProduct;
+export default connect(mapStateToProps, mapDispatchToProps)(AddProduct);

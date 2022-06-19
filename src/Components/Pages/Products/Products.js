@@ -4,32 +4,15 @@ import { connect } from 'react-redux';
 import { Button, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import List from './List';
+import UseSearchProduct from './HandleProduct/filteredProducts';
 
 import '../StylesPage.css';
 import './ProductStyle.css';
 
 const Products = ({allProducts}) => {
 
-  const [productsSearch, setProductsSearch] = useState(allProducts);
-
-  const handleSearch = e => {
-    const searchInp = e.target.value.toLowerCase();
-
-    if(searchInp.length) {
-      let productsArr = allProducts.map(categoryProducts => {
-        const products = categoryProducts.objects;
-        return {
-          category: categoryProducts.category,
-          objects: products.filter(product => product.pol.toLowerCase().includes(searchInp) || product.eng.toLowerCase().includes(searchInp)),
-        }
-      });
-
-      productsArr = productsArr.filter(categoryProducts => categoryProducts.objects.length);
-      setProductsSearch(productsArr);
-    } else {
-      setProductsSearch(allProducts);
-    }
-  }
+  const [products, setProducts] = useState(allProducts);
+  const handleSetSearch = e => setProducts(UseSearchProduct(e.target.value, allProducts));
 
   return (
     <section className="page px-5 py-3">
@@ -37,11 +20,12 @@ const Products = ({allProducts}) => {
         <Link to="/addProduct">
           <Button className="me-5 fs-4 px-5">Dodaj produkt</Button>
         </Link>
-        <FormControl placeholder='Szukaj' onChange={handleSearch}/>
+        <FormControl placeholder='Szukaj' onChange={handleSetSearch}/>
       </div>
+      
       <button onClick={() => console.log(allProducts)}>aa</button>
 
-      <List PRODUCTS={productsSearch}/>
+      <List PRODUCTS={products}/>
     </section>
   );
 }
