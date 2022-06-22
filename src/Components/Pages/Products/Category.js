@@ -20,7 +20,10 @@ const Category = ({category, objects}) => {
       {
         visibility && (
           <div className="d-flex ms-4">
-            {objects.map(product => <Product key={product.pol} product={product}/>)}
+            {objects
+              .sort((a,b) => a.pol.localeCompare(b.pol))
+              .map(product => <Product key={product.pol} product={product}/>)
+            }
           </div>
         )
       }
