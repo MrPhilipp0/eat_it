@@ -1,205 +1,178 @@
 export const PRODUCTS_DATA = [
   {
-    category: 'Owoce/Fruits',
-    objects: [
-      {
-        pol: 'Jabłko',
-        eng: 'Apple',
-        id : 0
-      },
-      {
-        pol: 'Banan',
-        eng: 'Banana',
-        id : 1
-      },
-      {
-        pol: 'Ananas',
-        eng: 'Pineapple',
-        id : 2
-      },
-    ]
+    pol: 'Jabłko',
+    eng: 'Apple',
+    id : 0,
+    category: 'Owoce/Fruits'
   },
   {
-    category: 'Warzywa/Vegetables',
-    objects: [
-      {
-        pol: 'Marchew',
-        eng: 'Carrot',
-        id : 3
-      },
-      {
-        pol: 'Seler',
-        eng: 'Celery',
-        id : 4
-      },
-      {
-        pol: 'Ziemiak',
-        eng: 'Potato',
-        id : 5
-      },
-    ]
+    pol: 'Banan',
+    eng: 'Banana',
+    id : 1,
+    category: 'Owoce/Fruits'
   },
   {
+    pol: 'Ananas',
+    eng: 'Pineapple',
+    id : 2,
+    category: 'Owoce/Fruits'
+  },
+  {
+    pol: 'Marchew',
+    eng: 'Carrot',
+    id : 3,
+    category: 'Warzywa/Vegetables'
+  },
+  {
+    pol: 'Seler',
+    eng: 'Celery',
+    id : 4,
+    category: 'Warzywa/Vegetables'
+  },
+  {
+    pol: 'Ziemiak',
+    eng: 'Potato',
+    id : 5,
+    category: 'Warzywa/Vegetables'
+  },
+  {
+    pol: 'Pepsi',
+    eng: 'Pepsi',
+    id : 6,
     category: 'Napoje/Drinks',
-    objects: [
-      {
-        pol: 'Pepsi',
-        eng: 'Pepsi',
-        id : 6
-      },
-      {
-        pol: 'Sok pomarańczowy',
-        eng: 'Orange juice',
-        id : 7
-      },
-      {
-        pol: 'Woda',
-        eng: 'Water',
-        id : 8
-      },
-    ]
   },
   {
+    pol: 'Sok pomarańczowy',
+    eng: 'Orange juice',
+    id : 7,
+    category: 'Napoje/Drinks',
+  },
+  {
+    pol: 'Woda',
+    eng: 'Water',
+    id : 8,
+    category: 'Napoje/Drinks',
+  },
+  {
+    pol: 'Piwo',
+    eng: 'Beer',
+    id : 9,
     category: 'Alkohol/Alcohol',
-    objects: [
-      {
-        pol: 'Piwo',
-        eng: 'Beer',
-        id : 9
-      },
-      {
-        pol: 'Wódka',
-        eng: 'Vodka',
-        id : 10
-      },
-      {
-        pol: 'Amaretto',
-        eng: 'Amaretto',
-        id : 11
-      },
-    ]
   },
   {
+    pol: 'Wódka',
+    eng: 'Vodka',
+    id : 10,
+    category: 'Alkohol/Alcohol',
+  },
+  {
+    pol: 'Amaretto',
+    eng: 'Amaretto',
+    id : 11,
+    category: 'Alkohol/Alcohol',
+  },
+  {
+    pol: 'Bułka',
+    eng: 'Roll',
+    id : 12,
     category: 'Pieczywo/Bread',
-    objects: [
-      {
-        pol: 'Bułka',
-        eng: 'Roll',
-        id : 12
-      },
-      {
-        pol: 'Chleb tostowy',
-        eng: 'Toasted bread',
-        id : 13
-      },
-      {
-        pol: 'Chleb pełnoziarnisty',
-        eng: 'Whole grain bread',
-        id : 14
-      },
-    ]
   },
   {
+    pol: 'Chleb tostowy',
+    eng: 'Toasted bread',
+    id : 13,
+    category: 'Pieczywo/Bread',
+  },
+  {
+    pol: 'Chleb pełnoziarnisty',
+    eng: 'Whole grain bread',
+    id : 14,
+    category: 'Pieczywo/Bread',
+  },
+  {
+    pol: 'Ser żółty',
+    eng: 'Cheese',
+    id : 15,
     category: 'Nabiał/Dairy',
-    objects: [
-      {
-        pol: 'Ser żółty',
-        eng: 'Cheese',
-        id : 15
-      },
-      {
-        pol: 'Mozzarella',
-        eng: 'Mozzarella',
-        id : 16
-      },
-      {
-        pol: 'Mleko',
-        eng: 'Milk',
-        id : 17
-      },
-    ]
   },
   {
+    pol: 'Mozzarella',
+    eng: 'Mozzarella',
+    id : 16,
+    category: 'Nabiał/Dairy',
+  },
+  {
+    pol: 'Mleko',
+    eng: 'Milk',
+    id : 17,
+    category: 'Nabiał/Dairy',
+  },
+  {
+    pol: 'Czekolada gorzka',
+    eng: 'Dark chocolate',
+    id : 18,
     category: 'Słodycze/Sweets',
-    objects: [
-      {
-        pol: 'Czekolada gorzka',
-        eng: 'Dark chocolate',
-        id : 18
-      },
-      {
-        pol: 'Czekolada mleczna',
-        eng: 'Chocolate',
-        id : 19
-      },
-      {
-        pol: 'Żelki',
-        eng: 'Jelly',
-        id : 20
-      },
-    ]
   },
   {
+    pol: 'Czekolada mleczna',
+    eng: 'Chocolate',
+    id : 19,
+    category: 'Słodycze/Sweets',
+  },
+  {
+    pol: 'Żelki',
+    eng: 'Jelly',
+    id : 20,
+    category: 'Słodycze/Sweets',
+  },
+  {
+    pol: 'Papryka ostra',
+    eng: 'Hot pepper',
+    id : 21,
     category: 'Przyprawy/Spices',
-    objects: [
-      {
-        pol: 'Papryka ostra',
-        eng: 'Hot pepper',
-        id : 21
-      },
-      {
-        pol: 'Papryka słodka',
-        eng: 'Sweet pepper',
-        id : 22
-      },
-      {
-        pol: 'Bazylia',
-        eng: 'Basil',
-        id : 23
-      },
-    ]
   },
   {
-    category: 'Inne/Others',
-    objects: []
+    pol: 'Papryka słodka',
+    eng: 'Sweet pepper',
+    id : 22,
+    category: 'Przyprawy/Spices',
+  },
+  {
+    pol: 'Bazylia',
+    eng: 'Basil',
+    id : 23,
+    category: 'Przyprawy/Spices',
   },
 ];
+
+export const CATEGORIES = ['Owoce/Fruits','Warzywa/Vegetables','Przyprawy/Spices','Słodycze/Sweets','Nabiał/Dairy','Pieczywo/Bread','Alkohol/Alcohol','Napoje/Drinks', 'Inne/Others'];
 
 export const API_KEY = '19yzIl1VTUeDcJ2lI+Vucg==gOeJidsoibjzCyny';
 
 export const propertiesLangMap = new Map([
-  ['calories', 'kalorie'],
-  ['cholesterol', 'cholesterol'],
-  ['fat', 'tłuszcze'],
-  ['fiber', 'błonnik'],
-  ['potassium', 'potas'],
-  ['protein', 'białko'],
-  ['sodium', 'sód'],
-  ['sugar', 'cukier']
+  ['calories', 'kalorie (kcal)'],
+  ['cholesterol', 'cholesterol (mg)'],
+  ['fat', 'tłuszcze (g)'],
+  ['fiber', 'błonnik (g)'],
+  ['potassium', 'potas (mg)'],
+  ['protein', 'białko (g)'],
+  ['sodium', 'sód (mg)'],
+  ['sugar', 'cukier (g)']
 ]);
 
-// function is verifying that product is in local storage
+// function is verifying that products are in local storage
 export const checkLS = array => {
   const productsArray = JSON.parse(JSON.stringify(array));
   const LS = JSON.parse(localStorage.getItem('PRODUCTS')) || [];
   if (LS.length) {
-    const listIDsfromLS = LS.map(item => item.id);
-    return productsArray.map(category => {
-      return {
-        ...category,
-        objects: category.objects.map(prod => {
-          if (listIDsfromLS.includes(prod.id)) {
-            return LS.filter(item => item.id === prod.id)[0];
-          } else {
-            return prod;
-          }
-        }) 
-      }        
-    })
-  } else return productsArray;
+    return LS;
+  } else {
+    localStorage.setItem('PRODUCTS', JSON.stringify(productsArray));
+    return productsArray;
+  }
 }
 
-// add new or update existing product to local storage
+// add new or update existing product in local storage
 export const updateProductInLS = async newItem => {
   const list = JSON.parse(await localStorage.getItem('PRODUCTS')) || [];
   if (!list.filter(prod => prod.eng === newItem.eng).length) {

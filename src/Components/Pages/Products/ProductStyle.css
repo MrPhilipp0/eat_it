@@ -10,3 +10,7 @@
 .product {
   cursor: pointer;
 }
+
+.deletedProduct {
+  display: none;
+}

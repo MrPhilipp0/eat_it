@@ -1,47 +1,43 @@
-import { ADD_PRODUCT, UPDATE_PRODUCT } from '../actions/actionsTypes'
+import { ADD_PRODUCT, DELETE_PRODUCT, UPDATE_PRODUCT } from '../actions/actionsTypes'
 import { PRODUCTS_DATA, checkLS, updateProductInLS } from '../store/constans';
-
-let productsCounter = PRODUCTS_DATA.reduce((a,b) => a += b.objects.length,0);
 
 const initialState = {
   products: checkLS(PRODUCTS_DATA),
 }
 
+const productsCounter = Math.max(...initialState.products.map(prod => prod.id));
+
 const ProductsReducer = (state = initialState, action) => {
+  let newStateProducts = [];
   switch (action.type) {
     case ADD_PRODUCT:
       const newProduct = {...action.product};
-      newProduct.id = ++productsCounter;
-      const newState2 = [...state.products].map(cat => {
-        if (cat.category === action.category) {
-          return {
-            category: cat.category,
-            objects: [...cat.objects, newProduct],
-          }
-        } else {
-          return cat
-        }
-      });
+      newProduct.id = productsCounter + 1;
+      updateProductInLS(newProduct);
       return {
-        products: newState2 
-      } 
+        products: [...state.products, newProduct]
+      }
+      
     case UPDATE_PRODUCT:
       updateProductInLS(action.product);
-      const newState = [...state.products].map(cat => {
-        return {
-          ...cat,
-          objects: cat.objects.map(prod => {
-            if (action.product.id === prod.id) {
-              return action.product;
-            } else {
-              return prod;
-            }
-          }) 
-        }        
-      })
+      newStateProducts = state.products.map(prod => {
+        if (action.product.id === prod.id) {
+          return action.product;
+        } else {
+          return prod;
+        }
+      }) 
       return {
-        products: newState,
+        products: newStateProducts,
       }
+
+    case DELETE_PRODUCT:
+      newStateProducts = state.products.filter(prod => prod.id !== action.id);
+      localStorage.setItem('PRODUCTS', JSON.stringify(newStateProducts));
+      return {
+        products: newStateProducts,
+      }
+
     default:
       break;
   }

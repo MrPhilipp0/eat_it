@@ -1,10 +1,10 @@
 /* eslint-disable no-eval */
 import React, { useState } from 'react';
 import { downloadProductData } from '../Products/HandleProduct/downloadData';
-import { propertiesLangMap, firstLetterUpperCase, ALERT_TYPES } from '../../../Redux/store/constans';
+import { propertiesLangMap, firstLetterUpperCase, ALERT_TYPES, CATEGORIES } from '../../../Redux/store/constans';
 import { connect } from 'react-redux';
 import AlertComponent from '../../Objects/AlertComponent';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import '../StylesPage.css';
 import { addProduct } from '../../../Redux/actions/productsActions';
@@ -12,6 +12,7 @@ import { addProduct } from '../../../Redux/actions/productsActions';
 const defaultProduct = {
   pol: '',
   eng: '',
+  category: '',
   calories: '',
   cholesterol: '',
   fat: '',
@@ -25,9 +26,6 @@ const defaultProduct = {
 const AddProduct = ({allProducts, addProductToState}) => {
 
   const [props, setProps] = useState(defaultProduct);
-  const [category, setCategory] = useState('');
-
-  const handleCategory = e => setCategory(e.target.value);
 
   const [showAlert, setShowAlert] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -75,17 +73,13 @@ const AddProduct = ({allProducts, addProductToState}) => {
   }
 
   const addNewProduct = () => {
-    const checkStore = () => {
-      const arr = allProducts.reduce((arr, obj) => arr.concat(obj.objects),[]);
-      return !!arr.filter(item => item.eng.toLowerCase() === props.eng.toLowerCase()).length;
-    }
-    if (!props.eng || !props.pol || !category) {
+    if (!props.eng || !props.pol || !props.category) {
       setAlertType('PRODUCT_INPUTS_ERROR');
-    } else if (checkStore()){
+    } else if (allProducts.filter(prod => prod.eng.toLowerCase() === props.eng.toLowerCase()).length){
       setAlertType('PRODUCT_EXIST_IN_STORE');
     } else {
       setAlertType('PRODUCT_ADD_TO_STORE');
-      addProductToState(props, category);
+      addProductToState(props);
       setProps(defaultProduct);
     }
     setShowAlert(true);
@@ -116,9 +110,9 @@ const AddProduct = ({allProducts, addProductToState}) => {
 
           <Form.Group>
             <Form.Label className="my-1 ms-1 fw-bold">Kategorie</Form.Label>
-            <Form.Select name='category' className="ps-1 pe-0" onChange={handleCategory}>
+            <Form.Select name='category' className="ps-1 pe-0" id="category" onChange={handleSetProps}>
               <option value=""></option>
-              {allProducts.map(e => e.category).map((category, index) => <option key={index} value={category}>{category}</option>)}
+              {CATEGORIES.map((category, index) => <option key={index} value={category}>{category}</option>)}
             </Form.Select>
           </Form.Group>
           
@@ -146,8 +140,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addProductToState : (product, category) => {
-      dispatch(addProduct(product, category));
+    addProductToState : product => {
+      dispatch(addProduct(product));
     }
   }
 }

@@ -27,5 +27,5 @@ const Category = ({category, objects}) => {
     </div>
   );
 }
- 
+
 export default Category;

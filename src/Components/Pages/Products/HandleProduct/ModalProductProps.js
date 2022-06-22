@@ -1,11 +1,10 @@
 import { useState, useRef } from 'react';
-import { connect } from 'react-redux';
-import { updateProduct } from '../../../../Redux/actions/productsActions';
 import { downloadProductData } from './downloadData';
+import { propertiesLangMap, firstLetterUpperCase } from '../../../../Redux/store/constans';
 
 import { Modal } from 'react-bootstrap';
 
-const ModalProductProps = ({state, handle, product, updateProductInState}) => {
+const ModalProductProps = ({state, handleShowProduct, product, handleUpdateProduct, handleDeleteProduct}) => {
   let productPropertiesREF = useRef(null);
 
   const [weight, setWeight] = useState(100);
@@ -13,6 +12,11 @@ const ModalProductProps = ({state, handle, product, updateProductInState}) => {
 
   const [properties, setProperties] = useState(product);
   const handleSetProperties = props => setProperties(props);
+  const handleSetOneProperty = e => {
+    const newState = JSON.parse(JSON.stringify(properties));
+    newState[e.target.id] = e.target.value;
+    setProperties(newState);
+  }
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -21,40 +25,61 @@ const ModalProductProps = ({state, handle, product, updateProductInState}) => {
       (async() => {
         const prod = await downloadProductData(product); // download product properties from API
         await handleSetProperties(prod); // setState product properties 
-        await updateProductInState(prod); // save product in locale storage
+        await handleUpdateProduct(prod); // save product in locale storage
         await setShowDetails(!showDetails); // show properties state
       })()
     } else {
       setShowDetails(!showDetails);
     }
   };
-  
+
+  const [editDetails, setEditDetails] = useState(false);
+
+  const handleEditDetails = () => setEditDetails(!editDetails);
+
   const calculateProperties = prop => Math.round(prop * weight / 100);
 
+  const handleOneProp = (POLname, ENGname) => {
+    if (editDetails) {
+      return (
+        <div className="d-flex" key={ENGname}>
+          <p className="calories me-1">{POLname} = </p>
+          <input type="number" id={ENGname} value={calculateProperties(properties[ENGname])} onChange={handleSetOneProperty}></input>
+        </div>
+      )
+    } else {
+      return (
+        <div className="d-flex" key={ENGname}>
+          <p className="calories me-1">{POLname} = </p>
+          <p>{calculateProperties(properties[ENGname])}</p>
+        </div>
+      )
+    }
+  }
+
   return (
-    <Modal show={state} onHide={handle}>
+    <Modal show={state} onHide={handleShowProduct}>
       <Modal.Header closeButton>
         <Modal.Title>
           {product.pol + " / " + product.eng}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <button className="btn btn-dark" onClick={handleShowDetails}>{showDetails ? "Ukryj szczegóły" : "Pokaż szczegóły"}</button>
+        <div className='d-flex justify-content-between'>
+          <button className="btn btn-dark" onClick={handleShowDetails}>{showDetails ? "Ukryj szczegóły" : "Pokaż szczegóły"}</button>
+          <button className="btn btn-dark" onClick={handleEditDetails} disabled={!showDetails}>{editDetails ? "Zatwierdź" : "Edytuj"}</button>
+          <button className="btn btn-dark" onClick={handleDeleteProduct}>Usuń produkt</button>
+        </div>
         {
           showDetails && (
             <div className="mt-3" ref={productPropertiesREF}>
               <div className="d-flex">
                 <p className="me-1">Waga (g/ml) =</p>
-                <input type="number" value={weight} onChange={handleSetWeight}></input>
+                <input type="number" value={weight} onChange={handleSetWeight} disabled={editDetails}></input>
               </div>
-              <p className="calories">Kalorie (kcal) = {calculateProperties(properties.calories)}</p>
-              <p className="protein">Białko (g) = {calculateProperties(properties.protein)}</p>
-              <p className="sugar">Cukier (g) = {calculateProperties(properties.sugar)}</p>
-              <p className="fat">Tłuszcze (g) = {calculateProperties(properties.fat)}</p>
-              <p className="cholesterol">Cholesterol (mg) = {calculateProperties(properties.cholesterol)}</p>
-              <p className="fiber">Błonnik (g) = {calculateProperties(properties.fiber)}</p>
-              <p className="potassium">Potas (mg) = {calculateProperties(properties.potassium)}</p>
-              <p className="sodium">Sód (mg) = {calculateProperties(properties.sodium)}</p>
+              {
+                Array.from(propertiesLangMap.keys()).map(prop => handleOneProp(firstLetterUpperCase(propertiesLangMap.get(prop)), prop))
+              }
             </div>
           )
         }
@@ -63,11 +88,4 @@ const ModalProductProps = ({state, handle, product, updateProductInState}) => {
   );
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    updateProductInState : product => {
-      dispatch(updateProduct(product))
-    }
-  }
-}
-export default connect(null, mapDispatchToProps)(ModalProductProps);
+export default ModalProductProps;

@@ -17,6 +17,7 @@ export async function downloadProductData(product) {
       id: product.id,
       pol: firstLetterUpperCase(product.pol),
       eng: firstLetterUpperCase(name),
+      category: product.category,
       calories: calories,
       cholesterol: cholesterol_mg,
       fat: fat_total_g,
