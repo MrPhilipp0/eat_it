@@ -22,8 +22,6 @@ const Products = ({allProducts}) => {
         </Link>
         <FormControl placeholder='Szukaj' onChange={handleSetSearch}/>
       </div>
-      
-      <button onClick={() => console.log(allProducts)}>aa</button>
 
       <List PRODUCTS={products}/>
     </section>

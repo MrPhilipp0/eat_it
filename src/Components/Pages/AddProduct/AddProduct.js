@@ -110,7 +110,7 @@ const AddProduct = ({allProducts, addProductToState}) => {
 
           <Form.Group>
             <Form.Label className="my-1 ms-1 fw-bold">Kategorie</Form.Label>
-            <Form.Select name='category' className="ps-1 pe-0" id="category" onChange={handleSetProps}>
+            <Form.Select value={props.category} name='category' className="ps-1 pe-0" id="category" onChange={handleSetProps}>
               <option value=""></option>
               {CATEGORIES.map((category, index) => <option key={index} value={category}>{category}</option>)}
             </Form.Select>

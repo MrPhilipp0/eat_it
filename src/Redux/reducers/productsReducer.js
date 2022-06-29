@@ -5,14 +5,12 @@ const initialState = {
   products: checkLS(PRODUCTS_DATA),
 }
 
-const productsCounter = Math.max(...initialState.products.map(prod => prod.id));
-
 const ProductsReducer = (state = initialState, action) => {
   let newStateProducts = [];
   switch (action.type) {
     case ADD_PRODUCT:
       const newProduct = {...action.product};
-      newProduct.id = productsCounter + 1;
+      newProduct.id = Math.max(...state.products.map(prod => prod.id)) + 1;
       updateProductInLS(newProduct);
       return {
         products: [...state.products, newProduct]
